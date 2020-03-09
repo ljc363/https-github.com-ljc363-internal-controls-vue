@@ -28,7 +28,9 @@
         header-align="center"
         align="center"
         width="80"
-        label="ID">
+        type="index"
+        index="1"
+        label="序号">
       </el-table-column>
       <el-table-column
         prop="projectName"
