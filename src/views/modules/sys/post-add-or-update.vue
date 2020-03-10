@@ -35,7 +35,7 @@
       init (id) {
         this.dataForm.id = id || 0
         this.$http({
-          url: this.$http.adornUrl('/sys/role/select'),
+          url: this.$http.adornUrl('/sys/post/select'),
           method: 'get',
           params: this.$http.adornParams()
         }).then(({data}) => {
@@ -48,13 +48,13 @@
         }).then(() => {
           if (this.dataForm.id) {
             this.$http({
-              url: this.$http.adornUrl(`/sys/position/info/${this.dataForm.id}`),
+              url: this.$http.adornUrl(`/sys/post/info/${this.dataForm.id}`),
               method: 'get',
               params: this.$http.adornParams()
             }).then(({data}) => {
               if (data && data.code === 0) {
-                this.dataForm.name = data.position.name
-                this.dataForm.orderNum = data.position.orderNum
+                this.dataForm.name = data.post.name
+                this.dataForm.orderNum = data.post.orderNum
               }
             })
           }
@@ -65,10 +65,10 @@
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
             this.$http({
-              url: this.$http.adornUrl(`/sys/position/${!this.dataForm.id ? 'save' : 'update'}`),
+              url: this.$http.adornUrl(`/sys/post/${!this.dataForm.id ? 'save' : 'update'}`),
               method: 'post',
               data: this.$http.adornData({
-                'positionId': this.dataForm.id || undefined,
+                'postId': this.dataForm.id || undefined,
                 'name': this.dataForm.name,
                 'orderNum': this.dataForm.orderNum
               })

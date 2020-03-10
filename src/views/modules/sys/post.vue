@@ -1,13 +1,13 @@
 <template>
-  <div class="mod-position">
+  <div class="mod-post">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
         <el-input v-model="dataForm.name" placeholder="岗位名" clearable></el-input>
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
-        <el-button v-if="isAuth('sys:position:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
-        <el-button v-if="isAuth('sys:position:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
+        <el-button v-if="isAuth('sys:post:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
+        <el-button v-if="isAuth('sys:post:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
       </el-form-item>
     </el-form>
     <el-table
@@ -23,7 +23,7 @@
         width="50">
       </el-table-column>
       <el-table-column
-        prop="positionId"
+        prop="postId"
         header-align="center"
         align="center"
         width="80"
@@ -50,8 +50,8 @@
         width="150"
         label="操作">
         <template slot-scope="scope">
-          <el-button v-if="isAuth('sys:position:update')" type="text" size="small" @click="addOrUpdateHandle(scope.row.positionId)">修改</el-button>
-          <el-button v-if="isAuth('sys:position:delete')" type="text" size="small" @click="deleteHandle(scope.row.positionId)">删除</el-button>
+          <el-button v-if="isAuth('sys:post:update')" type="text" size="small" @click="addOrUpdateHandle(scope.row.postId)">修改</el-button>
+          <el-button v-if="isAuth('sys:post:delete')" type="text" size="small" @click="deleteHandle(scope.row.postId)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -70,7 +70,7 @@
 </template>
 
 <script>
-  import AddOrUpdate from './position-add-or-update'
+  import AddOrUpdate from './post-add-or-update'
   export default {
     data () {
       return {
@@ -97,7 +97,7 @@
       getDataList () {
         this.dataListLoading = true
         this.$http({
-          url: this.$http.adornUrl('/sys/position/list'),
+          url: this.$http.adornUrl('/sys/post/list'),
           method: 'get',
           params: this.$http.adornParams({
             'page': this.pageIndex,
@@ -139,18 +139,18 @@
       },
       // 删除
       deleteHandle (id) {
-        var positionId = id ? [id] : this.dataListSelections.map(item => {
-          return item.positionId
+        var postId = id ? [id] : this.dataListSelections.map(item => {
+          return item.postId
         })
-        this.$confirm(`确定${positionId ? '删除' : '批量删除'}操作?`, '提示', {
+        this.$confirm(`确定${postId ? '删除' : '批量删除'}操作?`, '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
           this.$http({
-            url: this.$http.adornUrl('/sys/position/delete'),
+            url: this.$http.adornUrl('/sys/post/delete'),
             method: 'post',
-            data: this.$http.adornData(positionId, false)
+            data: this.$http.adornData(postId, false)
           }).then(({data}) => {
             if (data && data.code === 0) {
               this.$message({

@@ -4,7 +4,7 @@ import Mock from 'mockjs'
 var dataList = []
 for (let i = 0; i < Math.floor(Math.random() * 10 + 1); i++) {
   dataList.push(Mock.mock({
-    'positionId': '@increment',
+    'postId': '@increment',
     'name': '',
     'orderNum': null
   }))
@@ -14,7 +14,7 @@ for (let i = 0; i < Math.floor(Math.random() * 10 + 1); i++) {
 export function list () {
   return {
     // isOpen: false,
-    url: '/sys/position/list',
+    url: '/sys/post/list',
     type: 'get',
     data: {
       'msg': 'success',
@@ -34,12 +34,12 @@ export function list () {
 export function info () {
   return {
     // isOpen: false,
-    url: '/sys/position/info',
+    url: '/sys/post/info',
     type: 'get',
     data: {
       'msg': 'success',
       'code': 0,
-      'position': dataList[0]
+      'post': dataList[0]
     }
   }
 }
@@ -48,7 +48,7 @@ export function info () {
 export function add () {
   return {
     // isOpen: false,
-    url: '/sys/position/save',
+    url: '/sys/post/save',
     type: 'post',
     data: {
       'msg': 'success',
@@ -61,7 +61,7 @@ export function add () {
 export function update () {
   return {
     // isOpen: false,
-    url: '/sys/position/update',
+    url: '/sys/post/update',
     type: 'post',
     data: {
       'msg': 'success',
@@ -74,7 +74,7 @@ export function update () {
 export function del () {
   return {
     // isOpen: false,
-    url: '/sys/position/delete',
+    url: '/sys/post/delete',
     type: 'post',
     data: {
       'msg': 'success',
