@@ -25,6 +25,12 @@
       <el-form-item label="实际结束时间" size="mini" prop="actualEndTime">
         <el-date-picker v-model="dataForm.actualEndTime" placeholder="实际结束时间"></el-date-picker>
       </el-form-item>
+      <el-form-item label="预计工时" prop="estimatedWorkingHours">
+        <el-input v-model="dataForm.estimatedWorkingHours" placeholder="预计工时"></el-input>
+      </el-form-item>
+      <el-form-item label="实际工时" size="mini" prop="actualWorkingHours">
+        <el-input v-model="dataForm.actualWorkingHours" placeholder="实际工时"></el-input>
+      </el-form-item>
       <el-form-item label="状态" size="mini" prop="status">
         <el-radio-group v-model="dataForm.status">
           <el-radio :label="0">未开始</el-radio>
@@ -65,6 +71,8 @@
           actualEndTime: '',
           personInCharge: '',
           actualStartTime: '',
+          estimatedWorkingHours:'',
+          actualWorkingHours:'',
           auditor: '',
           status: 1,
           remark: ''
@@ -115,6 +123,8 @@
                 this.dataForm.actualEndTime = data.taskSchedule.actualEndTime
                 this.dataForm.actualStartTime = data.taskSchedule.actualStartTime
                 this.dataForm.personInCharge = data.taskSchedule.personInCharge
+                this.dataForm.estimatedWorkingHours = data.taskSchedule.estimatedWorkingHours
+                this.dataForm.actualWorkingHours = data.taskSchedule.actualWorkingHours
                 this.dataForm.auditor = data.taskSchedule.auditor
                 this.dataForm.status = data.taskSchedule.status
                 this.dataForm.remark = data.taskSchedule.remark
@@ -139,6 +149,8 @@
                 'plannedEndTime': this.dataForm.plannedEndTime,
                 'actualEndTime': this.dataForm.actualEndTime,
                 'actualStartTime': this.dataForm.actualStartTime,
+                'estimatedWorkingHours': this.dataForm.estimatedWorkingHours,
+                'actualWorkingHours': this.dataForm.actualWorkingHours,
                 'personInCharge': this.dataForm.personInCharge,
                 'auditor': this.dataForm.auditor,
                 'status': this.dataForm.status,

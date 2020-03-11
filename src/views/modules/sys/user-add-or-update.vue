@@ -13,13 +13,16 @@
       <el-form-item label="确认密码" prop="comfirmPassword" :class="{ 'is-required': !dataForm.id }">
         <el-input v-model="dataForm.comfirmPassword" type="password" placeholder="确认密码"></el-input>
       </el-form-item>
-      <el-form-item label="岗位" prop="postIdList">
+      <el-form-item label="岗位" prop="postName">
+        <el-input v-model="dataForm.postName" ></el-input>
+      </el-form-item>
+      <!--<el-form-item label="岗位" prop="postIdList">
         <el-select v-model="dataForm.postId" multiple placeholder="请选择">
           <el-option-group v-model="dataForm.postIdList">
           <el-option v-for="post in roleList" :key="post.postId" :label="post.postId">{{ post.name }}</el-option>
           </el-option-group>
         </el-select>
-      </el-form-item>
+      </el-form-item>-->
       <el-form-item label="角色" size="mini" prop="roleIdList">
         <el-checkbox-group v-model="dataForm.roleIdList">
           <el-checkbox v-for="role in roleList" :key="role.roleId" :label="role.roleId">{{ role.roleName }}</el-checkbox>
@@ -68,7 +71,7 @@
           password: '',
           comfirmPassword: '',
           salt: '',
-          postId: '',
+          postName: '',
           roleIdList: [],
          postIdList: [],
           status: 1
@@ -83,7 +86,7 @@
           comfirmPassword: [
             { validator: validateComfirmPassword, trigger: 'blur' }
           ],
-          postId: [
+          postName: [
             { required: true, message: '岗位不能为空', trigger: 'blur' }
           ]
         }
@@ -114,7 +117,7 @@
               if (data && data.code === 0) {
                 this.dataForm.userName = data.user.username
                 this.dataForm.salt = data.user.salt
-                this.dataForm.postId = data.user.postId
+                this.dataForm.postName = data.user.postName
                 this.dataForm.roleIdList = data.user.roleIdList
                 this.dataForm.status = data.user.status
               }
@@ -134,7 +137,7 @@
                 'username': this.dataForm.userName,
                 'password': this.dataForm.password,
                 'salt': this.dataForm.salt,
-                'postId': this.dataForm.postId,
+                'postName': this.dataForm.postName,
                 'status': this.dataForm.status,
                 'roleIdList': this.dataForm.roleIdList
               })

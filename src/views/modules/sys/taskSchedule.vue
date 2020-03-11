@@ -79,6 +79,20 @@
         label="实际结束时间">
       </el-table-column>
       <el-table-column
+        prop="estimatedWorkingHours"
+        header-align="center"
+        align="center"
+        width="180"
+        label="预计工时">
+      </el-table-column>
+      <el-table-column
+        prop="actualWorkingHours"
+        header-align="center"
+        align="center"
+        width="180"
+        label="实际工时">
+      </el-table-column>
+      <el-table-column
         prop="status"
         header-align="center"
         align="center"
