@@ -12,6 +12,7 @@ import * as taskSchedule from './modules/sys-taskSchedule'
 import * as weeklyWorkReport from './modules/sys-weeklyWorkReport'
 import * as dailyWorkReport from './modules/sys-dailyWorkReport'
 import * as post from './modules/sys-post'
+import * as projectMilepost from './modules/sys-pojectMilepost'
 
 // tips
 // 1. 开启/关闭[业务模块]拦截, 通过调用fnCreate方法[isOpen参数]设置.
@@ -29,6 +30,8 @@ fnCreate(taskSchedule, false)
 fnCreate(weeklyWorkReport, false)
 fnCreate(dailyWorkReport, false)
 fnCreate(post, false)
+fnCreate(projectMilepost, false)
+
 /**
  * 创建mock模拟数据
  * @param {*} mod 模块

@@ -2,7 +2,7 @@
   <div class="mod-taskSchedule">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
-        <el-input v-model="dataForm.projectName" placeholder="项目名称" clearable></el-input>
+        <el-input v-model="dataForm.projectName" placeholder="项目名称"  clearable></el-input>
         <el-input v-model="dataForm.taskName" placeholder="任务名称" clearable></el-input>
       </el-form-item>
       <el-form-item>

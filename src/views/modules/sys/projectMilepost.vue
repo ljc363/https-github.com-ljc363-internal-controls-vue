@@ -1,14 +1,13 @@
 <template>
-  <div class="mod-home">
+  <div class="mod-projectMilepost">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
-        <el-input v-model="dataForm.projectName" placeholder="项目名称"  clearable></el-input>
-        <el-input v-model="dataForm.taskName" placeholder="任务名称" clearable></el-input>
+        <el-input v-model="dataForm.personInCharge" placeholder="负责人" clearable></el-input>
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
-        <el-button v-if="isAuth('sys:taskSchedule:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
-        <el-button v-if="isAuth('sys:taskSchedule:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
+        <el-button v-if="isAuth('sys:projectMilepost:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
+        <el-button v-if="isAuth('sys:projectMilepost:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
       </el-form-item>
     </el-form>
     <el-table
@@ -33,22 +32,16 @@
         label="序号">
       </el-table-column>
       <el-table-column
-        prop="projectName"
+        prop="itemsUnderIt"
         header-align="center"
         align="center"
-        label="项目名称">
+        label="所属项目">
       </el-table-column>
       <el-table-column
-        prop="taskName"
+        prop="content"
         header-align="center"
         align="center"
-        label="任务名称">
-      </el-table-column>
-      <el-table-column
-        prop="subTask"
-        header-align="center"
-        align="center"
-        label="子任务">
+        label="内容">
       </el-table-column>
       <el-table-column
         prop="plannedStartTime"
@@ -79,20 +72,6 @@
         label="实际结束时间">
       </el-table-column>
       <el-table-column
-        prop="estimatedWorkingHours"
-        header-align="center"
-        align="center"
-        width="180"
-        label="预计工时">
-      </el-table-column>
-      <el-table-column
-        prop="actualWorkingHours"
-        header-align="center"
-        align="center"
-        width="180"
-        label="实际工时">
-      </el-table-column>
-      <el-table-column
         prop="status"
         header-align="center"
         align="center"
@@ -109,13 +88,6 @@
         align="center"
         width="180"
         label="负责人">
-      </el-table-column>
-      <el-table-column
-        prop="auditor"
-        header-align="center"
-        align="center"
-        width="180"
-        label="审核人">
       </el-table-column>
       <el-table-column
         fixed="right"
@@ -141,5 +113,106 @@
     <!-- 弹窗, 新增 / 修改 -->
     <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
   </div>
-
 </template>
+
+<script>
+  import AddOrUpdate from './projectMilepost-add-or-update'
+  export default {
+    data () {
+      return {
+        dataForm: {
+          personInCharge: ''
+        },
+        dataList: [],
+        pageIndex: 1,
+        pageSize: 10,
+        totalPage: 0,
+        dataListLoading: false,
+        dataListSelections: [],
+        addOrUpdateVisible: false
+      }
+    },
+    components: {
+      AddOrUpdate
+    },
+    activated () {
+      this.getDataList()
+    },
+    methods: {
+      // 获取数据列表
+      getDataList () {
+        this.dataListLoading = true
+        this.$http({
+          url: this.$http.adornUrl('/sys/projectMilepost/list'),
+          method: 'get',
+          params: this.$http.adornParams({
+            'page': this.pageIndex,
+            'limit': this.pageSize,
+            'personInCharge': this.dataForm.personInCharge
+          })
+        }).then(({data}) => {
+          if (data && data.code === 0) {
+            this.dataList = data.page.list
+            this.totalPage = data.page.totalCount
+          } else {
+            this.dataList = []
+            this.totalPage = 0
+          }
+          this.dataListLoading = false
+        })
+      },
+      // 每页数
+      sizeChangeHandle (val) {
+        this.pageSize = val
+        this.pageIndex = 1
+        this.getDataList()
+      },
+      // 当前页
+      currentChangeHandle (val) {
+        this.pageIndex = val
+        this.getDataList()
+      },
+      // 多选
+      selectionChangeHandle (val) {
+        this.dataListSelections = val
+      },
+      // 新增 / 修改
+      addOrUpdateHandle (id) {
+        this.addOrUpdateVisible = true
+        this.$nextTick(() => {
+          this.$refs.addOrUpdate.init(id)
+        })
+      },
+      // 删除
+      deleteHandle (id) {
+        var userIds = id ? [id] : this.dataListSelections.map(item => {
+          return item.userId
+        })
+        this.$confirm(`确定进行${id ? '删除' : '批量删除'}操作?`, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http({
+            url: this.$http.adornUrl('/sys/projectMilepost/delete'),
+            method: 'post',
+            data: this.$http.adornData(userIds, false)
+          }).then(({data}) => {
+            if (data && data.code === 0) {
+              this.$message({
+                message: '操作成功',
+                type: 'success',
+                duration: 1500,
+                onClose: () => {
+                  this.getDataList()
+                }
+              })
+            } else {
+              this.$message.error(data.msg)
+            }
+          })
+        }).catch(() => {})
+      }
+    }
+  }
+</script>
