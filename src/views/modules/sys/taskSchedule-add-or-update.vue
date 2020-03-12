@@ -39,9 +39,8 @@
         </el-radio-group>
       </el-form-item>
       <el-form-item label="负责人" prop="personInCharge">
-        {{dataForm.userId}}
-        <el-select v-model="dataForm.userId"  placeholder="请选择">
-          <el-option v-for="user in userList" :key="user.userId" :value="user.userId" :label="user.realName">{{ user.realName }}</el-option>
+        <el-select v-model="dataForm.personInCharge"  placeholder="请选择">
+          <el-option v-for="user in userList" :key="user.realName" :value="user.realName" :label="user.realName">{{ user.realName }}</el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="审核人" prop="auditor">
@@ -72,7 +71,7 @@
           plannedStartTime: '',
           plannedEndTime: '',
           actualEndTime: '',
-          userId: '',
+          personInCharge: '',
           actualStartTime: '',
           estimatedWorkingHours:'',
           actualWorkingHours:'',
@@ -87,7 +86,7 @@
           taskName: [
             { required: true, message: '任务名称不能为空', trigger: 'blur' }
           ],
-          userId: [
+          personInCharge: [
             { required: true, message: '负责人不能为空', trigger: 'blur' }
           ],
           auditor: [
@@ -125,7 +124,7 @@
                 this.dataForm.plannedEndTime = data.taskSchedule.plannedEndTime
                 this.dataForm.actualEndTime = data.taskSchedule.actualEndTime
                 this.dataForm.actualStartTime = data.taskSchedule.actualStartTime
-                this.dataForm.userId = data.taskSchedule.userId
+                this.dataForm.personInCharge = data.taskSchedule.personInCharge
                 this.dataForm.estimatedWorkingHours = data.taskSchedule.estimatedWorkingHours
                 this.dataForm.actualWorkingHours = data.taskSchedule.actualWorkingHours
                 this.dataForm.auditor = data.taskSchedule.auditor
@@ -154,7 +153,7 @@
                 'actualStartTime': this.dataForm.actualStartTime,
                 'estimatedWorkingHours': this.dataForm.estimatedWorkingHours,
                 'actualWorkingHours': this.dataForm.actualWorkingHours,
-                'userId': this.dataForm.userId,
+                'personInCharge': this.dataForm.personInCharge,
                 'auditor': this.dataForm.auditor,
                 'status': this.dataForm.status,
                 'roleIdList': this.dataForm.roleIdList

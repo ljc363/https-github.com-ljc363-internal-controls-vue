@@ -2,7 +2,7 @@
   <div class="mod-projectMilepost">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
-        <el-input v-model="dataForm.personInCharge" placeholder="负责人" clearable></el-input>
+        <el-input v-model="dataForm.realName" placeholder="负责人" clearable></el-input>
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
@@ -83,7 +83,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        prop="personInCharge"
+        prop="realName"
         header-align="center"
         align="center"
         width="180"
@@ -121,7 +121,7 @@
     data () {
       return {
         dataForm: {
-          personInCharge: ''
+          realName: ''
         },
         dataList: [],
         pageIndex: 1,
@@ -148,7 +148,7 @@
           params: this.$http.adornParams({
             'page': this.pageIndex,
             'limit': this.pageSize,
-            'personInCharge': this.dataForm.personInCharge
+            'realName': this.dataForm.realName
           })
         }).then(({data}) => {
           if (data && data.code === 0) {

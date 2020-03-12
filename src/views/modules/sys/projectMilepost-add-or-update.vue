@@ -5,8 +5,8 @@
     :visible.sync="visible">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="80px">
       <el-form-item label="所属项目" prop="projectM">
-        <el-select v-model="dataForm.projectId"  placeholder="请选择">
-          <el-option v-for="projectM in projectMList" :key="projectM.id" :value="projectM.id" :label="projectM.projectName">
+        <el-select v-model="dataForm.itemsUnderIt"  placeholder="请选择">
+          <el-option v-for="projectM in projectMList" :key="projectM.projectName" :value="projectM.projectName" :label="projectM.projectName">
             {{ projectM.projectName }}</el-option>
         </el-select>
       </el-form-item>
@@ -33,8 +33,8 @@
         </el-radio-group>
       </el-form-item>
       <el-form-item label="负责人" prop="personInCharge">
-        <el-select v-model="dataForm.userId"  placeholder="请选择">
-          <el-option v-for="user in userList" :key="user.userId" :value="user.userId" :label="user.realName">{{ user.realName }}</el-option>
+        <el-select v-model="dataForm.realName"  placeholder="请选择">
+          <el-option v-for="user in userList" :key="user.realName" :value="user.realName" :label="user.realName">{{ user.realName }}</el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="备注" prop="remark">
@@ -55,21 +55,21 @@
         visible: false,
         dataForm: {
           id: 0,
-          projectId: '',
+          itemsUnderIt: '',
           content: '',
           plannedStartTime: '',
           plannedEndTime: '',
           actualEndTime: '',
-          userId: '',
+          realName: '',
           actualStartTime: '',
           status: 1,
           remark: ''
         },
         dataRule: {
-          projectId: [
+          itemsUnderIt: [
             { required: true, message: '所属项目名称不能为空', trigger: 'blur' }
           ],
-          userId: [
+          realName: [
             { required: true, message: '负责人不能为空', trigger: 'blur' }
           ],
         }
@@ -104,13 +104,13 @@
               params: this.$http.adornParams()
             }).then(({data}) => {
               if (data && data.code === 0) {
-                this.dataForm.projectId = data.projectMilepost.projectId
+                this.dataForm.itemsUnderIt = data.projectMilepost.itemsUnderIt
                 this.dataForm.content = data.projectMilepost.content
                 this.dataForm.plannedStartTime = data.projectMilepost.plannedStartTime
                 this.dataForm.plannedEndTime = data.projectMilepost.plannedEndTime
                 this.dataForm.actualEndTime = data.projectMilepost.actualEndTime
                 this.dataForm.actualStartTime = data.projectMilepost.actualStartTime
-                this.dataForm.userId = data.taskSchedule.userId
+                this.dataForm.realName = data.taskSchedule.realName
                 this.dataForm.status = data.projectMilepost.status
                 this.dataForm.remark = data.projectMilepost.remark
               }
@@ -127,13 +127,13 @@
               method: 'post',
               data: this.$http.adornData({
                 'id': this.dataForm.id || undefined,
-                'projectId': this.dataForm.projectId,
+                'itemsUnderIt': this.dataForm.itemsUnderIt,
                 'content': this.dataForm.content,
                 'plannedStartTime': this.dataForm.plannedStartTime,
                 'plannedEndTime': this.dataForm.plannedEndTime,
                 'actualEndTime': this.dataForm.actualEndTime,
                 'actualStartTime': this.dataForm.actualStartTime,
-                'userId': this.dataForm.userId,
+                'realName': this.dataForm.realName,
                 'status': this.dataForm.status,
                 'roleIdList': this.dataForm.roleIdList
               })

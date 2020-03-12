@@ -17,14 +17,14 @@
         <el-input v-model="dataForm.comfirmPassword" type="password" placeholder="确认密码"></el-input>
       </el-form-item>
       <el-form-item label="岗位" prop="postId">
-        <el-select v-model="dataForm.postId"  placeholder="请选择">
-          <el-option v-for="post in postList" :key="post.postId" :value="post.postId" :label="post.name">{{ post.name }}</el-option>
+        <el-select v-model="dataForm.postName"  placeholder="请选择">
+          <el-option v-for="post in postList" :key="post.name" :value="post.name" :label="post.name">{{ post.name }}</el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="角色"  prop="roleIdList">
-        <el-option-group v-model="dataForm.roleIdList">
+      <el-form-item label="角色" size="mini" prop="roleIdList">
+        <el-checkbox-group v-model="dataForm.roleIdList">
           <el-checkbox v-for="role in roleList" :key="role.roleId" :label="role.roleId">{{ role.roleName }}</el-checkbox>
-        </el-option-group>
+        </el-checkbox-group>
       </el-form-item>
       <el-form-item label="状态" size="mini" prop="status">
         <el-radio-group v-model="dataForm.status">
@@ -65,11 +65,11 @@
         dataForm: {
           id: 0,
           userName: '',
-          reaName: '',
+          realName: '',
           password: '',
           comfirmPassword: '',
           salt: '',
-          postId: '',
+          postName: '',
           roleIdList: [],
           status: 1
         },
@@ -83,7 +83,7 @@
           comfirmPassword: [
             { validator: validateComfirmPassword, trigger: 'blur' }
           ],
-          postId: [
+          postName: [
             { required: true, message: '岗位不能为空', trigger: 'blur' }
           ]
         }
@@ -120,10 +120,10 @@
             }).then(({data}) => {
               if (data && data.code === 0) {
                 this.dataForm.userName = data.user.username
-                this.dataForm.reaName = data.user.reaName
                 this.dataForm.salt = data.user.salt
                 this.dataForm.roleIdList = data.user.roleIdList
-                this.dataForm.postId = data.user.postId;
+                this.dataForm.postName = data.user.postName;
+                this.dataForm.realName = data.user.realName;
                 this.dataForm.status = data.user.status
               }
             })
@@ -140,10 +140,10 @@
               data: this.$http.adornData({
                 'userId': this.dataForm.id || undefined,
                 'username': this.dataForm.userName,
-                'reaName': this.dataForm.reaName,
+                'realName': this.dataForm.realName,
                 'password': this.dataForm.password,
                 'salt': this.dataForm.salt,
-                'postId': this.dataForm.postId,
+                'postName': this.dataForm.postName,
                 'status': this.dataForm.status,
                 'roleIdList': this.dataForm.roleIdList
               })
