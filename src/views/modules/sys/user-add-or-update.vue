@@ -4,8 +4,11 @@
     :close-on-click-modal="false"
     :visible.sync="visible">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="80px">
-      <el-form-item label="用户名" prop="userName">
+      <el-form-item label="登录帐号" prop="userName">
         <el-input v-model="dataForm.userName" placeholder="登录帐号"></el-input>
+      </el-form-item>
+      <el-form-item label="真实用户名" prop="realName">
+        <el-input v-model="dataForm.realName" placeholder="真实用户名"></el-input>
       </el-form-item>
       <el-form-item label="密码" prop="password" :class="{ 'is-required': !dataForm.id }">
         <el-input v-model="dataForm.password" type="password" placeholder="密码"></el-input>
@@ -13,16 +16,11 @@
       <el-form-item label="确认密码" prop="comfirmPassword" :class="{ 'is-required': !dataForm.id }">
         <el-input v-model="dataForm.comfirmPassword" type="password" placeholder="确认密码"></el-input>
       </el-form-item>
-      <el-form-item label="岗位" prop="postName">
-        <el-input v-model="dataForm.postName" ></el-input>
-      </el-form-item>
-      <!--<el-form-item label="岗位" prop="postIdList">
-        <el-select v-model="dataForm.postId" multiple placeholder="请选择">
-          <el-option-group v-model="dataForm.postIdList">
-          <el-option v-for="post in roleList" :key="post.postId" :label="post.postId">{{ post.name }}</el-option>
-          </el-option-group>
+      <el-form-item label="岗位" prop="postId">
+        <el-select v-model="dataForm.postId"  placeholder="请选择">
+          <el-option v-for="post in postList" :key="post.postId" :value="post.postId" :label="post.name">{{ post.name }}</el-option>
         </el-select>
-      </el-form-item>-->
+      </el-form-item>
       <el-form-item label="角色"  prop="roleIdList">
         <el-option-group v-model="dataForm.roleIdList">
           <el-checkbox v-for="role in roleList" :key="role.roleId" :label="role.roleId">{{ role.roleName }}</el-checkbox>
@@ -64,16 +62,15 @@
       return {
         visible: false,
         roleList: [],
-        postList: [],
         dataForm: {
           id: 0,
           userName: '',
+          reaName: '',
           password: '',
           comfirmPassword: '',
           salt: '',
-          postName: '',
+          postId: '',
           roleIdList: [],
-         postIdList: [],
           status: 1
         },
         dataRule: {
@@ -86,7 +83,7 @@
           comfirmPassword: [
             { validator: validateComfirmPassword, trigger: 'blur' }
           ],
-          postName: [
+          postId: [
             { required: true, message: '岗位不能为空', trigger: 'blur' }
           ]
         }
@@ -95,7 +92,14 @@
     methods: {
       init (id) {
         this.dataForm.id = id || 0
-
+        this.$http({
+          url: this.$http.adornUrl('/sys/post/select'),
+          method: 'get',
+          params: this.$http.adornParams()
+        }).then(({data}) => {
+          console.log(data.list)
+          this.postList = data && data.code === 0 ? data.list : []
+        })
         this.$http({
           url: this.$http.adornUrl('/sys/role/select'),
           method: 'get',
@@ -116,9 +120,10 @@
             }).then(({data}) => {
               if (data && data.code === 0) {
                 this.dataForm.userName = data.user.username
+                this.dataForm.reaName = data.user.reaName
                 this.dataForm.salt = data.user.salt
-                this.dataForm.postName = data.user.postName
                 this.dataForm.roleIdList = data.user.roleIdList
+                this.dataForm.postId = data.user.postId;
                 this.dataForm.status = data.user.status
               }
             })
@@ -135,9 +140,10 @@
               data: this.$http.adornData({
                 'userId': this.dataForm.id || undefined,
                 'username': this.dataForm.userName,
+                'reaName': this.dataForm.reaName,
                 'password': this.dataForm.password,
                 'salt': this.dataForm.salt,
-                'postName': this.dataForm.postName,
+                'postId': this.dataForm.postId,
                 'status': this.dataForm.status,
                 'roleIdList': this.dataForm.roleIdList
               })

@@ -35,7 +35,13 @@
         prop="username"
         header-align="center"
         align="center"
-        label="用户名">
+        label="登录帐号">
+      </el-table-column>
+      <el-table-column
+        prop="realName"
+        header-align="center"
+        align="center"
+        label="真实用户名">
       </el-table-column>
       <el-table-column
         prop="postName"

@@ -4,8 +4,11 @@
     :close-on-click-modal="false"
     :visible.sync="visible">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="80px">
-      <el-form-item label="所属项目" prop="itemsUnderIt">
-        <el-input v-model="dataForm.itemsUnderIt" placeholder="所属项目"></el-input>
+      <el-form-item label="所属项目" prop="projectM">
+        <el-select v-model="dataForm.projectId"  placeholder="请选择">
+          <el-option v-for="projectM in projectMList" :key="projectM.id" :value="projectM.id" :label="projectM.projectName">
+            {{ projectM.projectName }}</el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="项目内容" prop="content">
         <el-input v-model="dataForm.content"  placeholder="项目内容"></el-input>
@@ -30,7 +33,9 @@
         </el-radio-group>
       </el-form-item>
       <el-form-item label="负责人" prop="personInCharge">
-        <el-input v-model="dataForm.personInCharge" placeholder="负责人"></el-input>
+        <el-select v-model="dataForm.userId"  placeholder="请选择">
+          <el-option v-for="user in userList" :key="user.userId" :value="user.userId" :label="user.realName">{{ user.realName }}</el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="备注" prop="remark">
         <el-input v-model="dataForm.remark" placeholder="备注"></el-input>
@@ -48,24 +53,23 @@
     data () {
       return {
         visible: false,
-        roleList: [],
         dataForm: {
           id: 0,
-          itemsUnderIt: '',
+          projectId: '',
           content: '',
           plannedStartTime: '',
           plannedEndTime: '',
           actualEndTime: '',
-          personInCharge: '',
+          userId: '',
           actualStartTime: '',
           status: 1,
           remark: ''
         },
         dataRule: {
-          itemsUnderIt: [
+          projectId: [
             { required: true, message: '所属项目名称不能为空', trigger: 'blur' }
           ],
-          personInCharge: [
+          userId: [
             { required: true, message: '负责人不能为空', trigger: 'blur' }
           ],
         }
@@ -75,11 +79,18 @@
       init (id) {
         this.dataForm.id = id || 0
         this.$http({
-          url: this.$http.adornUrl('/sys/role/select'),
+          url: this.$http.adornUrl('/sys/projectM/select'),
           method: 'get',
           params: this.$http.adornParams()
         }).then(({data}) => {
-          this.roleList = data && data.code === 0 ? data.list : []
+          this.projectMList = data && data.code === 0 ? data.list : []
+        })
+        this.$http({
+          url: this.$http.adornUrl('/sys/user/select'),
+          method: 'get',
+          params: this.$http.adornParams()
+        }).then(({data}) => {
+          this.userList = data && data.code === 0 ? data.list : []
         }).then(() => {
           this.visible = true
           this.$nextTick(() => {
@@ -93,13 +104,13 @@
               params: this.$http.adornParams()
             }).then(({data}) => {
               if (data && data.code === 0) {
-                this.dataForm.itemsUnderIt = data.projectMilepost.itemsUnderIt
+                this.dataForm.projectId = data.projectMilepost.projectId
                 this.dataForm.content = data.projectMilepost.content
                 this.dataForm.plannedStartTime = data.projectMilepost.plannedStartTime
                 this.dataForm.plannedEndTime = data.projectMilepost.plannedEndTime
                 this.dataForm.actualEndTime = data.projectMilepost.actualEndTime
                 this.dataForm.actualStartTime = data.projectMilepost.actualStartTime
-                this.dataForm.personInCharge = data.projectMilepost.personInCharge
+                this.dataForm.userId = data.taskSchedule.userId
                 this.dataForm.status = data.projectMilepost.status
                 this.dataForm.remark = data.projectMilepost.remark
               }
@@ -116,13 +127,13 @@
               method: 'post',
               data: this.$http.adornData({
                 'id': this.dataForm.id || undefined,
-                'itemsUnderIt': this.dataForm.itemsUnderIt,
+                'projectId': this.dataForm.projectId,
                 'content': this.dataForm.content,
                 'plannedStartTime': this.dataForm.plannedStartTime,
                 'plannedEndTime': this.dataForm.plannedEndTime,
                 'actualEndTime': this.dataForm.actualEndTime,
                 'actualStartTime': this.dataForm.actualStartTime,
-                'personInCharge': this.dataForm.personInCharge,
+                'userId': this.dataForm.userId,
                 'status': this.dataForm.status,
                 'roleIdList': this.dataForm.roleIdList
               })

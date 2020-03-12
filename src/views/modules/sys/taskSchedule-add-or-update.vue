@@ -39,7 +39,10 @@
         </el-radio-group>
       </el-form-item>
       <el-form-item label="负责人" prop="personInCharge">
-        <el-input v-model="dataForm.personInCharge" placeholder="负责人"></el-input>
+        {{dataForm.userId}}
+        <el-select v-model="dataForm.userId"  placeholder="请选择">
+          <el-option v-for="user in userList" :key="user.userId" :value="user.userId" :label="user.realName">{{ user.realName }}</el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="审核人" prop="auditor">
         <el-input v-model="dataForm.auditor"  auditor="审核人"></el-input>
@@ -69,7 +72,7 @@
           plannedStartTime: '',
           plannedEndTime: '',
           actualEndTime: '',
-          personInCharge: '',
+          userId: '',
           actualStartTime: '',
           estimatedWorkingHours:'',
           actualWorkingHours:'',
@@ -84,7 +87,7 @@
           taskName: [
             { required: true, message: '任务名称不能为空', trigger: 'blur' }
           ],
-          personInCharge: [
+          userId: [
             { required: true, message: '负责人不能为空', trigger: 'blur' }
           ],
           auditor: [
@@ -97,11 +100,11 @@
       init (id) {
         this.dataForm.id = id || 0
         this.$http({
-          url: this.$http.adornUrl('/sys/role/select'),
+          url: this.$http.adornUrl('/sys/user/select'),
           method: 'get',
           params: this.$http.adornParams()
         }).then(({data}) => {
-          this.roleList = data && data.code === 0 ? data.list : []
+          this.userList = data && data.code === 0 ? data.list : []
         }).then(() => {
           this.visible = true
           this.$nextTick(() => {
@@ -122,7 +125,7 @@
                 this.dataForm.plannedEndTime = data.taskSchedule.plannedEndTime
                 this.dataForm.actualEndTime = data.taskSchedule.actualEndTime
                 this.dataForm.actualStartTime = data.taskSchedule.actualStartTime
-                this.dataForm.personInCharge = data.taskSchedule.personInCharge
+                this.dataForm.userId = data.taskSchedule.userId
                 this.dataForm.estimatedWorkingHours = data.taskSchedule.estimatedWorkingHours
                 this.dataForm.actualWorkingHours = data.taskSchedule.actualWorkingHours
                 this.dataForm.auditor = data.taskSchedule.auditor
@@ -151,7 +154,7 @@
                 'actualStartTime': this.dataForm.actualStartTime,
                 'estimatedWorkingHours': this.dataForm.estimatedWorkingHours,
                 'actualWorkingHours': this.dataForm.actualWorkingHours,
-                'personInCharge': this.dataForm.personInCharge,
+                'userId': this.dataForm.userId,
                 'auditor': this.dataForm.auditor,
                 'status': this.dataForm.status,
                 'roleIdList': this.dataForm.roleIdList
