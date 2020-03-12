@@ -215,8 +215,8 @@
       },
       // 删除
       deleteHandle (id) {
-        var userIds = id ? [id] : this.dataListSelections.map(item => {
-          return item.userId
+        var id = id ? [id] : this.dataListSelections.map(item => {
+          return item.id
         })
         this.$confirm(`确定进行${id ? '删除' : '批量删除'}操作?`, '提示', {
           confirmButtonText: '确定',
@@ -226,7 +226,7 @@
           this.$http({
             url: this.$http.adornUrl('/sys/taskSchedule/delete'),
             method: 'post',
-            data: this.$http.adornData(userIds, false)
+            data: this.$http.adornData(id, false)
           }).then(({data}) => {
             if (data && data.code === 0) {
               this.$message({

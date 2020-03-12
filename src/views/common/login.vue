@@ -101,7 +101,7 @@
 
 <style lang="scss">
   .site-wrapper.site-page--login {
-    post: absolute;
+    position: absolute;
     top: 0;
     right: 0;
     bottom: 0;

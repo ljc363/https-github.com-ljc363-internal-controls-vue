@@ -171,10 +171,10 @@
       },
       // 删除
       deleteHandle (id) {
-        var userIds = id ? [id] : this.dataListSelections.map(item => {
+        var id = id ? [id] : this.dataListSelections.map(item => {
           return item.userId
         })
-        this.$confirm(`确定${id ? '删除' : '批量删除'}操作?`, '提示', {
+        this.$confirm(`确定 '删除' : '批量删除'操作?`, '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -182,7 +182,7 @@
           this.$http({
             url: this.$http.adornUrl('/sys/projectM/delete'),
             method: 'post',
-            data: this.$http.adornData(userIds, false)
+            data: this.$http.adornData(id, false)
           }).then(({data}) => {
             if (data && data.code === 0) {
               this.$message({
