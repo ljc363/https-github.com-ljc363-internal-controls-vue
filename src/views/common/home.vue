@@ -3,6 +3,8 @@
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
         <el-input v-model="dataForm.projectName" placeholder="项目名称"  clearable></el-input>
+      </el-form-item>
+      <el-form-item>
         <el-input v-model="dataForm.taskName" placeholder="任务名称" clearable></el-input>
       </el-form-item>
       <el-form-item>
@@ -98,9 +100,32 @@
         align="center"
         label="进度">
         <template slot-scope="scope">
-          <el-tag v-if="scope.row.status === 0" size="small" type="danger">未开始</el-tag>
+          <el-tag v-if="scope.row.status === 0" size="small" type="info">未开始</el-tag>
           <el-tag v-if="scope.row.status === 1" size="small" type="danger">进行中</el-tag>
-          <el-tag v-if="scope.row.status === 2" size="small" type="danger">完成</el-tag>
+          <el-tag v-if="scope.row.status === 2" size="small" type="success">完成</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="taskPriority"
+        header-align="center"
+        align="center"
+        width="150"
+        label="任务优先级">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.taskPriority === 0"  type="danger">一级</el-tag>
+          <el-tag v-if="scope.row.taskPriority === 1"  type="warning">二级</el-tag>
+          <el-tag v-if="scope.row.taskPriority === 2"  type="info">三级</el-tag>
+          <el-tag v-if="scope.row.taskPriority === 3"  type="success">四级</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="completionRatio"
+        header-align="center"
+        align="center"
+        width="180"
+        label="完成比例">
+        <template slot-scope="scope">
+          <el-progress :text-inside="true" :stroke-width="26" :percentage=scope.row.completionRatio></el-progress>
         </template>
       </el-table-column>
       <el-table-column

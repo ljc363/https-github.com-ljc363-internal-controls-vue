@@ -22,9 +22,9 @@
         </el-select>
       </el-form-item>
       <el-form-item label="角色" size="mini" prop="roleIdList">
-        <el-checkbox-group v-model="dataForm.roleIdList">
-          <el-checkbox v-for="role in roleList" :key="role.roleId" :label="role.roleId">{{ role.roleName }}</el-checkbox>
-        </el-checkbox-group>
+        <el-radio-group v-model="dataForm.roleIdList">
+          <el-radio v-for="role in roleList" :key="role.roleId" :label="role.roleId">{{ role.roleName }}</el-radio>
+        </el-radio-group>
       </el-form-item>
       <el-form-item label="状态" size="mini" prop="status">
         <el-radio-group v-model="dataForm.status">

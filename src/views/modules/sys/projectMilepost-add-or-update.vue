@@ -28,7 +28,7 @@
       <el-form-item label="状态" size="mini" prop="status">
         <el-radio-group v-model="dataForm.status">
           <el-radio :label="0">未开始</el-radio>
-          <el-radio :label="1">开始中</el-radio>
+          <el-radio :label="1">进行中</el-radio>
           <el-radio :label="2">完成</el-radio>
         </el-radio-group>
       </el-form-item>

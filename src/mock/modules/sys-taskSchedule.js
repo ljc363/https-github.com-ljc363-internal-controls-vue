@@ -15,6 +15,8 @@ for (let i = 0; i < Math.floor(Math.random() * 10 + 1); i++) {
     'personInCharge': null,
     'auditor': null,
     'status': 0,
+    'taskPriority':0,
+    'completionRatio':0,
     'remark': null
   }))
 }
@@ -38,6 +40,8 @@ export function list () {
     }
   }
 }
+
+
 
 // 获取信息
 export function info () {

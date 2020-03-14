@@ -38,8 +38,21 @@
           <el-radio :label="2">完成</el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="负责人" prop="personInCharge">
-        <el-input v-model="dataForm.personInCharge" placeholder="负责人"></el-input>
+      <el-form-item label="任务优先级" size="mini" prop="taskPriority">
+        <el-radio-group v-model="dataForm.taskPriority">
+          <el-radio :label="0">一级</el-radio>
+          <el-radio :label="1">二级</el-radio>
+          <el-radio :label="2">三级</el-radio>
+          <el-radio :label="3">四级</el-radio>
+        </el-radio-group>
+      </el-form-item>
+      <el-form-item label="完成比例" prop="completionRatio">
+        <el-input v-model="dataForm.completionRatio"  auditor="完成比例"></el-input>
+      </el-form-item>
+      <el-form-item label="负责人" prop="userId">
+        <el-select v-model="dataForm.userId"  placeholder="请选择">
+          <el-option v-for="user in userList" :key="user.userId" :value="user.userId" :label="user.realName">{{ user.realName }}</el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="审核人" prop="auditor">
         <el-input v-model="dataForm.auditor"  auditor="审核人"></el-input>
@@ -69,12 +82,14 @@
           plannedStartTime: '',
           plannedEndTime: '',
           actualEndTime: '',
-          personInCharge: '',
+          userId: '',
           actualStartTime: '',
           estimatedWorkingHours:'',
           actualWorkingHours:'',
           auditor: '',
           status: 1,
+          taskPriority:1,
+          completionRatio:0,
           remark: ''
         },
         dataRule: {
@@ -84,7 +99,7 @@
           taskName: [
             { required: true, message: '任务名称不能为空', trigger: 'blur' }
           ],
-          personInCharge: [
+          userId: [
             { required: true, message: '负责人不能为空', trigger: 'blur' }
           ],
           auditor: [
@@ -97,11 +112,11 @@
       init (id) {
         this.dataForm.id = id || 0
         this.$http({
-          url: this.$http.adornUrl('/sys/role/select'),
+          url: this.$http.adornUrl('/sys/user/select'),
           method: 'get',
           params: this.$http.adornParams()
         }).then(({data}) => {
-          this.roleList = data && data.code === 0 ? data.list : []
+          this.userList = data && data.code === 0 ? data.list : []
         }).then(() => {
           this.visible = true
           this.$nextTick(() => {
@@ -122,11 +137,13 @@
                 this.dataForm.plannedEndTime = data.taskSchedule.plannedEndTime
                 this.dataForm.actualEndTime = data.taskSchedule.actualEndTime
                 this.dataForm.actualStartTime = data.taskSchedule.actualStartTime
-                this.dataForm.personInCharge = data.taskSchedule.personInCharge
+                this.dataForm.userId = data.taskSchedule.userId
                 this.dataForm.estimatedWorkingHours = data.taskSchedule.estimatedWorkingHours
                 this.dataForm.actualWorkingHours = data.taskSchedule.actualWorkingHours
                 this.dataForm.auditor = data.taskSchedule.auditor
                 this.dataForm.status = data.taskSchedule.status
+                this.dataForm.taskPriority = data.taskSchedule.taskPriority
+                this.dataForm.completionRatio = data.taskSchedule.completionRatio
                 this.dataForm.remark = data.taskSchedule.remark
               }
             })
@@ -151,9 +168,11 @@
                 'actualStartTime': this.dataForm.actualStartTime,
                 'estimatedWorkingHours': this.dataForm.estimatedWorkingHours,
                 'actualWorkingHours': this.dataForm.actualWorkingHours,
-                'personInCharge': this.dataForm.personInCharge,
+                'userId': this.dataForm.userId,
                 'auditor': this.dataForm.auditor,
                 'status': this.dataForm.status,
+                'taskPriority':this.dataForm.taskPriority,
+                'completionRatio':this.dataForm.completionRatio,
                 'roleIdList': this.dataForm.roleIdList
               })
             }).then(({data}) => {
