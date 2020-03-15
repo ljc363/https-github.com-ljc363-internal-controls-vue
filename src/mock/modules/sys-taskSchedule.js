@@ -41,7 +41,22 @@ export function list () {
   }
 }
 
-
+// 获取列表
+export function ownList () {
+  return {
+    // isOpen: false,
+    url: '/sys/taskSchedule/ownList',
+    type: 'get',
+    data: {
+      'msg': 'success',
+      'code': 0,
+      'page': {
+        'totalCount': dataList.length,
+        'list': dataList
+      }
+    }
+  }
+}
 
 // 获取信息
 export function info () {

@@ -4,6 +4,14 @@
       <el-form-item>
         <el-input v-model="dataForm.realName" placeholder="负责人" clearable></el-input>
       </el-form-item>
+      <el-form-item label="状态">
+        <el-select v-model="dataForm.status" placeholder="请选择">
+          <el-option label="全部" value=''></el-option>
+          <el-option label="未开始" value=0></el-option>
+          <el-option label="进行中" value=1></el-option>
+          <el-option label="完成" value=2></el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
         <el-button v-if="isAuth('sys:projectMilepost:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
@@ -121,7 +129,8 @@
     data () {
       return {
         dataForm: {
-          realName: ''
+          realName: '',
+          status:''
         },
         dataList: [],
         pageIndex: 1,
@@ -148,7 +157,8 @@
           params: this.$http.adornParams({
             'page': this.pageIndex,
             'limit': this.pageSize,
-            'realName': this.dataForm.realName
+            'realName': this.dataForm.realName,
+            'status': this.dataForm.status
           })
         }).then(({data}) => {
           if (data && data.code === 0) {
