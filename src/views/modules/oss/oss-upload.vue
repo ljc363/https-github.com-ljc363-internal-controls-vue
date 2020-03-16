@@ -14,7 +14,7 @@
       style="text-align: center;">
       <i class="el-icon-upload"></i>
       <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-      <div class="el-upload__tip" slot="tip">只支持jpg、png、gif格式的图片！</div>
+      <div class="el-upload__tip" slot="tip"></div>
     </el-upload>
   </el-dialog>
 </template>
@@ -36,13 +36,13 @@
         this.visible = true
       },
       // 上传之前
-      beforeUploadHandle (file) {
+     /* beforeUploadHandle (file) {
         if (file.type !== 'image/jpg' && file.type !== 'image/jpeg' && file.type !== 'image/png' && file.type !== 'image/gif') {
           this.$message.error('只支持jpg、png、gif格式的图片！')
           return false
         }
         this.num++
-      },
+      },*/
       // 上传成功
       successHandle (response, file, fileList) {
         this.fileList = fileList
