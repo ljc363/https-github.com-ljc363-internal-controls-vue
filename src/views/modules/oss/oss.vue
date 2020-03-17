@@ -13,24 +13,41 @@
       v-loading="dataListLoading"
       @selection-change="selectionChangeHandle"
       style="width: 100%;">
-      <el-table-column
+      <el-table-column.
+
         type="selection"
         header-align="center"
         align="center"
         width="50">
-      </el-table-column>
+      </el-table-column.>
       <el-table-column
         prop="id"
         header-align="center"
         align="center"
         width="80"
-        label="ID">
+        type="index"
+        index="1"
+        label="序号">
+      </el-table-column>
+      <el-table-column
+        prop="fileName"
+        header-align="center"
+        align="center"
+        width="80"
+        label="文件名">
       </el-table-column>
       <el-table-column
         prop="url"
         header-align="center"
         align="center"
         label="URL地址">
+      </el-table-column>
+      <el-table-column
+        prop="uploadingPeopl"
+        header-align="center"
+        align="center"
+        width="80"
+        label="上传人">
       </el-table-column>
       <el-table-column
         prop="createDate"
